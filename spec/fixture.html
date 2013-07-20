@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>An example page</title>
+    <style type="text/css">
+      .loading {
+        background-color: #bbb;
+      }
+    </style>
+    <script type="text/javascript">
+      characters = [
+        {
+          name: 'Sharoar Dewshining',
+          gender: 'M',
+          race: 'Eladrin',
+          character_class: 'Avenger'
+        },
+        {
+          name: 'Jamfalcon Silentall',
+          gender: 'M',
+          race: 'Gnome',
+          character_class: 'Avenger'
+        },
+        {
+          name: 'Waltiln Zebrine',
+          gender: 'M',
+          race: 'Minotaur',
+          character_class: 'Barbarian'
+        },
+        {
+          name: 'Fruice Horsekiller',
+          gender: 'M',
+          race: 'Minotaur',
+          character_class: 'Warlock'
+        },
+        {
+          name: 'Nurinil Shearbane',
+          gender: '-',
+          race: 'Warforged',
+          character_class: 'Warlock'
+        },
+        {
+          name: 'Cordiana Flamesbreath',
+          gender: 'F',
+          race: 'Dragonborn',
+          character_class: 'Warlord'
+        },
+        {
+          name: 'Lorasys Stalkingwolf',
+          gender: 'F',
+          race: 'Half-Elf',
+          character_class: 'Wizard'
+        },
+        {
+          name: 'Zinnadove Cupshigh',
+          gender: 'F',
+          race: 'Halfling',
+          character_class: 'Shaman'
+        },
+        {
+          name: 'Hollyonna Madwar',
+          gender: 'F',
+          race: 'Half-Orc',
+          character_class: 'Sorcerer'
+        },
+        {
+          name: 'Theratra Wraithlight',
+          gender: 'F',
+          race: 'Revenant',
+          character_class: 'Swordmage'
+        },
+        {
+          name: 'Marstina In-The-Shadows',
+          gender: 'F',
+          race: 'Changling',
+          character_class: 'Warden'
+        },
+        {
+          name: 'Pruatis Riddlemaster',
+          gender: 'F',
+          race: 'Deva',
+          character_class: 'Paladin'
+        },
+        {
+          name: 'Aramorel Glimmergaunt',
+          gender: 'F',
+          race: 'Elf',
+          character_class: 'Ranger'
+        },
+        {
+          name: 'Iriekain Soldshort',
+          gender: 'F',
+          race: 'Gnome',
+          character_class: 'Rogue'
+        },
+        {
+          name: 'Victarath Daleborn',
+          gender: 'F',
+          race: 'Human',
+          character_class: 'Rogue'
+        },
+        {
+          name: 'Eiluvial Mazebane',
+          gender: 'F',
+          race: 'Minotaur',
+          character_class: 'Druid'
+        },
+        {
+          name: 'Ravalove Sinsinger',
+          gender: 'F',
+          race: 'Tiefling',
+          character_class: 'Fighter'
+        },
+        {
+          name: 'Wilgold Icesword',
+          gender: 'M',
+          race: 'Dragonborn',
+          character_class: 'Fighter'
+        },
+        {
+          name: 'Leonan Darksbane',
+          gender: 'M',
+          race: 'Eladrin',
+          character_class: 'Invoker'
+        },
+        {
+          name: 'Horhand Nightsteel',
+          gender: 'M',
+          race: 'Goliath',
+          character_class: 'Barbarian'
+        }
+      ];
+
+      CLEAR_CONTENT_DELAY = 500;
+      LOAD_CONTENT_DELAY = 500;
+
+      function populate_characters(filtered_characters, selected_class) {
+        var container = document.getElementById('characters_list');
+        var title = document.getElementById('filter_title');
+        setTimeout(function(){
+          container.setAttribute('class', 'loading');
+          while (container.firstChild) {
+            container.removeChild(container.firstChild);
+          }
+
+          setTimeout(function(){
+            filtered_characters.forEach(function(character) {
+              var tr = document.createElement('tr');
+              
+              var name = document.createElement('td');
+              name.textContent = character['name'];
+
+              var gender = document.createElement('td');
+              gender.textContent = character['gender'];
+
+              var race = document.createElement('td');
+              race.textContent = character['race'];
+
+              var character_class = document.createElement('td');
+              character_class.textContent = character['character_class'];
+
+              tr.appendChild(name);
+              tr.appendChild(gender);
+              tr.appendChild(race);
+              tr.appendChild(character_class);
+              container.appendChild(tr);
+            });
+            container.removeAttribute('class');
+            title.innerHTML = selected_class
+          }, LOAD_CONTENT_DELAY);
+        }, CLEAR_CONTENT_DELAY);
+      }
+
+      window.onload = function() {
+        var classes = [];
+        characters.forEach(function(character) {
+          var class_name = character['character_class'];
+          if (classes.indexOf(class_name) == -1) {
+            classes.push(class_name);
+          }
+        });
+
+        var select = document.getElementById('filter');
+        classes.forEach(function(class_name) {
+          var option = document.createElement('option');
+          option.setAttribute('value', class_name);
+          option.textContent = class_name;
+          select.add(option);
+        });
+
+        select.onchange = function(event) {
+          var filter_class = event.target.value;
+          var filtered_characters = characters.filter(function(character) {
+            return character['character_class'] == filter_class;
+          });
+          populate_characters(filtered_characters, filter_class);
+        }
+        
+        populate_characters(characters, '');
+      };
+    </script>
+</head>
+
+<body>
+  <h2 id='filter_title'><h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Gender</th>
+        <th>Race</th>
+        <th>Class</th>
+      </tr>
+    <thead>
+    <tbody id='characters_list'>
+    </tbody>
+  </table>
+  <select id='filter'>
+    <option value='all' disabled='true' selected='true'>-</option>
+  </select>
+</body>
+</html>
